@@ -1,18 +1,18 @@
-import React from 'react'
+import React from "react";
 
 export const DataContext = React.createContext({
-    account: '',
+    account: null,
     setAccount: () => {},
 });
 
-function DataProvider({children}) {
-    const [account, setAccount] = React.useState('');
+function DataProvider({ children }) {
+    const [account, setAccount] = React.useState(null);
 
-  return (
-    <DataContext.Provider value={{ account, setAccount }}>
-        {children}
-    </DataContext.Provider>
-  )
+    return (
+        <DataContext.Provider value={{ account, setAccount }}>
+            {children}
+        </DataContext.Provider>
+    );
 }
 
 export default DataProvider;

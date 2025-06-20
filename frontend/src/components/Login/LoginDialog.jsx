@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Dialog, TextField } from "@mui/material";
-import { authenticateSignup,authenticateLogin } from "../../service/api";
+import { authenticateSignup, authenticateLogin } from "../../service/api";
 import { DataContext } from "../../context/DataProvider";
 
 function LoginDialog({ open, setOpen }) {
@@ -24,32 +24,32 @@ function LoginDialog({ open, setOpen }) {
         } else {
             setSignupData({ ...signupData, [e.target.name]: e.target.value });
         }
-    }
+    };
     const handleClose = () => {
         setOpen(false);
         toggleAccount("login");
-    }
+    };
 
-    const signupUser = async() => {
+    const signupUser = async () => {
         let response = await authenticateSignup(signupData);
-        if(!response) return;
+        if (!response) return;
         console.log(response);
-        setAccount(signupData.firstName);
+        setAccount(response.data.data);
         handleClose();
-    }
+    };
 
-    const loginUser = async() => {
+    const loginUser = async () => {
         let response = await authenticateLogin(loginData);
-        
-        if(!response || response.status !== 200) {
+
+        if (!response || response.status !== 200) {
             alert("Please enter a valid email and password");
             return;
         }
         console.log(response);
-        setAccount(response.data.data.firstName);
+        setAccount(response.data.data);
         handleClose();
-    }
-    const {setAccount} = React.useContext(DataContext);
+    };
+    const { setAccount } = React.useContext(DataContext);
     return (
         <Dialog
             open={open}
@@ -79,7 +79,7 @@ function LoginDialog({ open, setOpen }) {
                                 label="Enter Email/Mobile Number"
                                 fullWidth
                                 margin="normal"
-                                onChange={(e)=>onInputChange(e)}
+                                onChange={(e) => onInputChange(e)}
                                 name="email"
                             />
                             <TextField
@@ -88,7 +88,7 @@ function LoginDialog({ open, setOpen }) {
                                 type="password"
                                 fullWidth
                                 margin="normal"
-                                onChange={(e)=>onInputChange(e)}
+                                onChange={(e) => onInputChange(e)}
                                 name="password"
                             />
                             <p className="mt-20 text-blue-500">
@@ -153,7 +153,7 @@ function LoginDialog({ open, setOpen }) {
                                 label="Enter First Name"
                                 fullWidth
                                 margin="normal"
-                                onChange={(e)=>onInputChange(e)}
+                                onChange={(e) => onInputChange(e)}
                                 name="firstName"
                             />
                             <TextField
@@ -161,7 +161,7 @@ function LoginDialog({ open, setOpen }) {
                                 label="Enter Last Name"
                                 fullWidth
                                 margin="normal"
-                                onChange={(e)=>onInputChange(e)}
+                                onChange={(e) => onInputChange(e)}
                                 name="lastName"
                             />
                             <TextField
@@ -169,7 +169,7 @@ function LoginDialog({ open, setOpen }) {
                                 label="Enter Mobile Number"
                                 fullWidth
                                 margin="normal"
-                                onChange={(e)=>onInputChange(e)}
+                                onChange={(e) => onInputChange(e)}
                                 name="mobile"
                             />
                             <TextField
@@ -177,7 +177,7 @@ function LoginDialog({ open, setOpen }) {
                                 label="Enter Email"
                                 fullWidth
                                 margin="normal"
-                                onChange={(e)=>onInputChange(e)}
+                                onChange={(e) => onInputChange(e)}
                                 name="email"
                             />
                             <TextField
@@ -186,7 +186,7 @@ function LoginDialog({ open, setOpen }) {
                                 type="password"
                                 fullWidth
                                 margin="normal"
-                                onChange={(e)=>onInputChange(e)}
+                                onChange={(e) => onInputChange(e)}
                                 name="password"
                             />
                             <p className="mt-8 text-blue-500">

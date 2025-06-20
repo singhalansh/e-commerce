@@ -15,6 +15,7 @@
     "@mui/material": "^6.4.8",
     "@tailwindcss/vite": "^4.0.15",
     "install": "^0.13.0",
+    "js-cookie": "^3.0.5",
     "lucide-react": "^0.518.0",
     "npm": "^11.2.0",
     "react": "^19.0.0",
