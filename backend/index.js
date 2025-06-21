@@ -15,11 +15,7 @@ const app = express();
 
 app.use(
     cors({
-        origin: [
-            "http://localhost:5173",
-            "https://e-commerce-uh9v.onrender.com",
-            "flipkartcloneansh.vercel.app"
-        ],
+        origin: true, // Allow all origins
         credentials: true,
     })
 );
