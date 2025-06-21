@@ -28,6 +28,7 @@ import {
     removeFromCart,
     updateCartItemQuantity,
     generateCartRazorpayOrder,
+    verifyPayment,
 } from "../../service/api";
 
 const Cart = () => {
@@ -136,27 +137,16 @@ const Cart = () => {
                     order_id: response.data.order.id,
                     handler: async function (razorpayResponse) {
                         try {
-                            const verifyRes = await fetch(
-                                "http://localhost:3000/api/verify-payment",
-                                {
-                                    method: "POST",
-                                    headers: {
-                                        "Content-Type": "application/json",
-                                    },
-                                    credentials: "include",
-                                    body: JSON.stringify({
-                                        razorpay_payment_id:
-                                            razorpayResponse.razorpay_payment_id,
-                                        razorpay_order_id:
-                                            razorpayResponse.razorpay_order_id,
-                                        razorpay_signature:
-                                            razorpayResponse.razorpay_signature,
-                                        fromCart: true,
-                                    }),
-                                }
-                            );
-                            const verifyData = await verifyRes.json();
-                            if (verifyRes.ok && verifyData.success) {
+                            const verifyRes = await verifyPayment({
+                                razorpay_payment_id:
+                                    razorpayResponse.razorpay_payment_id,
+                                razorpay_order_id:
+                                    razorpayResponse.razorpay_order_id,
+                                razorpay_signature:
+                                    razorpayResponse.razorpay_signature,
+                                fromCart: true,
+                            });
+                            if (verifyRes && verifyRes.status === 200) {
                                 showSnackbar(
                                     "Cart payment verified and successful!"
                                 );
