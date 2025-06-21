@@ -81,7 +81,7 @@ export const userlogin = async (req, res) => {
 
         const accessTokenOptions = {
             secure: true,
-            httpOnly: false,
+            httpOnly: true,
             sameSite: "none",
         };
         const refreshTokenOptions = {

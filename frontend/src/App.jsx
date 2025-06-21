@@ -16,12 +16,9 @@ function AppContent() {
 
     useEffect(() => {
         const autoLoginUser = async () => {
-            const token = Cookies.get("accessToken");
-            if (token) {
-                const response = await fetchUserProfile();
-                if (response && response.status === 200) {
-                    setAccount(response.data.data);
-                }
+            const response = await fetchUserProfile();
+            if (response && response.status === 200) {
+                setAccount(response.data.data);
             }
         };
         autoLoginUser();
