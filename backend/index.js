@@ -18,6 +18,7 @@ app.use(
         origin: [
             "http://localhost:5173",
             "https://e-commerce-uh9v.onrender.com",
+            "flipkartcloneansh.vercel.app"
         ],
         credentials: true,
     })
