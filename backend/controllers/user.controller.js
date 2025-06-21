@@ -82,10 +82,12 @@ export const userlogin = async (req, res) => {
         const accessTokenOptions = {
             secure: true,
             httpOnly: false,
+            sameSite: "none",
         };
         const refreshTokenOptions = {
             secure: true,
             httpOnly: true,
+            sameSite: "none",
         };
         return res
             .status(200)

@@ -16,7 +16,10 @@ app.get("/", (req, res) => {
 
 app.use(
     cors({
-        origin: "http://localhost:5173", // or your frontend URL
+        origin: [
+            "http://localhost:5173", // local dev
+            "https://your-frontend-domain.com" // <-- replace with your deployed frontend domain if needed
+        ],
         credentials: true,
     })
 );
@@ -42,3 +45,10 @@ paytmparams["ORDER_ID"] = uuid();
 paytmparams["CUST_ID"] = uuid();
 paytmparams["TXN_AMOUNT"] = "1"; // Default amount, can be updated later
 paytmparams["CHANNEL_ID"] = "WEB";
+
+// When setting cookies (e.g., in login route), use:
+// res.cookie("accessToken", token, {
+//   httpOnly: true,
+//   secure: true,
+//   sameSite: "none"
+// });
