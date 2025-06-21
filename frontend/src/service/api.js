@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const URL = "http://localhost:3000";
+axios.defaults.baseURL = "https://e-commerce-uh9v.onrender.com";
+axios.defaults.withCredentials = true;
 
 export const authenticateSignup = async (user) => {
     try {
