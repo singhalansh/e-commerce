@@ -4,10 +4,12 @@ import { RiArrowDropDownLine } from "react-icons/ri";
 import LoginDialog from "../Login/LoginDialog";
 import { DataContext } from "../../context/DataProvider";
 import Profile from "./Profile";
+import { Badge } from "@mui/material";
+import { Link } from "react-router-dom";
 
 function CustomButtons({ isMobile }) {
     const [open, setOpen] = React.useState(false);
-    const { account } = React.useContext(DataContext);
+    const { account, cart } = React.useContext(DataContext);
 
     // Responsive: vertical on mobile, horizontal on desktop
     return (
@@ -51,8 +53,20 @@ function CustomButtons({ isMobile }) {
                         : "flex items-center ml-5"
                 }
             >
-                <FaShoppingCart />
-                <h1 className="ml-1">Cart</h1>
+                <Link
+                    to="/cart"
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        color: "inherit",
+                        textDecoration: "none",
+                    }}
+                >
+                    <Badge badgeContent={cart.length} color="secondary">
+                        <FaShoppingCart />
+                    </Badge>
+                    <h1 className="ml-1">Cart</h1>
+                </Link>
             </div>
             <LoginDialog open={open} setOpen={setOpen} />
         </div>

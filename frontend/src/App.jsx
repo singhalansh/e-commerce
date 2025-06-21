@@ -9,6 +9,7 @@ import ProductDetailView from "./components/Product/ProductDetailView";
 import { Provider } from "react-redux";
 import store from "./store/store";
 import Cookies from "js-cookie";
+import Cart from "./components/Cart/Cart";
 
 function AppContent() {
     const { setAccount } = useContext(DataContext);
@@ -32,6 +33,7 @@ function AppContent() {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/product/:id" element={<ProductDetailView />} />
+                <Route path="/cart" element={<Cart />} />
             </Routes>
         </Router>
     );

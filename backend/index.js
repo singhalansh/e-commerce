@@ -4,6 +4,7 @@ import cors from "cors";
 import connectDB from "./db/index.js";
 import DefaultData from "./default.js";
 import routes from "./routes/routes.js";
+import {v4 as uuid} from "uuid";
 import cookieParser from "cookie-parser";
 const app = express();
 
@@ -30,3 +31,14 @@ app.listen(3000, () => {
 });
 
 DefaultData();
+
+export const paytmMerchantKey = process.env.PAYTM_MERCHANT_KEY || "YOUR_PAYTM_MERCHANT_KEY";
+export const paytmparams= {}
+paytmparams["MID"] = process.env.PAYTM_MID || "YOUR_PAYTM_MID";
+paytmparams["WEBSITE"] = process.env.PAYTM_WEBSITE || "YOUR_PAYTM_WEBSITE";
+paytmparams["INDUSTRY_TYPE_ID"] = process.env.PAYTM_INDUSTRY_TYPE_ID || "YOUR_PAYTM_INDUSTRY_TYPE_ID";
+paytmparams["CALLBACK_URL"] = process.env.PAYTM_CALLBACK_URL || "YOUR_PAYTM_CALLBACK_URL";
+paytmparams["ORDER_ID"] = uuid();
+paytmparams["CUST_ID"] = uuid();
+paytmparams["TXN_AMOUNT"] = "1"; // Default amount, can be updated later
+paytmparams["CHANNEL_ID"] = "WEB";

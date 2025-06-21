@@ -9,15 +9,22 @@ import ProductSpecifications from "./ProductSpecifications";
 function ProductDetailView() {
     const { id } = useParams();
     const dispatch = useDispatch();
+    console.log("sfds", id);
+    useEffect(() => {
+        if (id) dispatch(getProductById(id));
+    }, [dispatch, id]);
+
     const { product, loading } = useSelector((state) => state.products);
+    console.log("product", product);
 
     const [selectedImage, setSelectedImage] = useState(0);
     const [quantity, setQuantity] = useState(1);
     const [isWishlisted, setIsWishlisted] = useState(false);
 
-    useEffect(() => {
-        if (id) dispatch(getProductById(id));
-    }, [dispatch, id]);
+    // Use the primary image URL for all images to ensure consistency.
+    const productImages = product
+        ? [product.url, product.url, product.url, product.url]
+        : [];
 
     if (loading) {
         return (
@@ -34,29 +41,20 @@ function ProductDetailView() {
         return (
             <div className="mt-[55px] min-h-screen flex items-center justify-center">
                 <div className="text-center">
-                    <div className="text-6xl mb-4">📦</div>
                     <h1 className="text-2xl font-bold text-gray-800 mb-2">
                         Product not found
                     </h1>
                     <p className="text-gray-600">
-                        The product you're looking for doesn't exist.
+                        There might have been an error fetching the product.
                     </p>
                 </div>
             </div>
         );
     }
 
-    // Use product.detailUrl or product.url for images
-    const productImages = [
-        product.detailUrl || product.url,
-        product.url,
-        product.url,
-        product.url,
-    ];
-
-    const originalPrice = product.price?.mrp || product.price?.cost * 1.3;
+    const originalPrice = product?.price?.mrp || product?.price?.cost * 1.3;
     const discountPercent = Math.round(
-        ((originalPrice - product.price?.cost) / originalPrice) * 100
+        ((originalPrice - product?.price?.cost) / originalPrice) * 100
     );
 
     return (
@@ -69,13 +67,15 @@ function ProductDetailView() {
                         setSelectedImage={setSelectedImage}
                         isWishlisted={isWishlisted}
                         setIsWishlisted={setIsWishlisted}
+                        product={product}
+                        quantity={quantity}
                     />
                     <ProductInfo
                         product={product}
-                        originalPrice={originalPrice}
-                        discountPercent={discountPercent}
                         quantity={quantity}
                         setQuantity={setQuantity}
+                        originalPrice={originalPrice}
+                        discountPercent={discountPercent}
                     />
                 </div>
                 <ProductSpecifications product={product} />

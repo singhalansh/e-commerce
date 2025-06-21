@@ -1,4 +1,5 @@
 import User from "../models/user.model.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
 export const usersignup = async (req, res) => {
     try {
@@ -77,7 +78,7 @@ export const userlogin = async (req, res) => {
             throw new Error(404, "User not found");
         }
         console.log("user logged in successfully ", loggedInUser);
-        
+
         const accessTokenOptions = {
             secure: true,
             httpOnly: false,
@@ -175,3 +176,107 @@ export const getMyProfile = (req, res) => {
         .status(200)
         .json({ data: user, message: "User profile fetched successfully" });
 };
+
+export const getCart = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id).populate("cart.productId");
+    if (!user) {
+        return res.status(404).json({ message: "User not found" });
+    }
+    return res
+        .status(200)
+        .json({ data: user.cart, message: "Cart fetched successfully" });
+});
+
+export const addToCart = asyncHandler(async (req, res) => {
+    try {
+        const { productId, quantity = 1 } = req.body;
+        if (!productId) {
+            return res.status(400).json({ message: "Product ID is required" });
+        }
+        const user = await User.findById(req.user._id);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        const cartItem = user.cart.find(
+            (item) => item.productId.toString() === productId
+        );
+        if (cartItem) {
+            cartItem.quantity += quantity;
+        } else {
+            user.cart.push({ productId, quantity });
+        }
+        await user.save();
+        await user.populate("cart.productId");
+        return res
+            .status(200)
+            .json({ data: user.cart, message: "Cart updated successfully" });
+    } catch (error) {
+        console.log(" add to cart me hi error aa rha bhai ", error);
+        res.status(error.status || 500).json({
+            message: error.message || "Internal server error",
+        });
+    }
+});
+
+export const removeFromCart = asyncHandler(async (req, res) => {
+    try {
+        const { productId } = req.body;
+        if (!productId) {
+            return res.status(400).json({ message: "Product ID is required" });
+        }
+        const user = await User.findById(req.user._id);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        user.cart = user.cart.filter(
+            (item) => item.productId.toString() !== productId
+        );
+        await user.save();
+        await user.populate("cart.productId");
+        return res.status(200).json({
+            data: user.cart,
+            message: "Item removed from cart successfully",
+        });
+    } catch (error) {
+        console.log(" remove from cart me hi error aa rha bhai ", error);
+        res.status(error.status || 500).json({
+            message: error.message || "Internal server error",
+        });
+    }
+});
+
+export const updateCartItemQuantity = asyncHandler(async (req, res) => {
+    try {
+        const { productId, quantity } = req.body;
+        if (!productId || quantity < 1) {
+            return res.status(400).json({
+                message: "Product ID and valid quantity are required",
+            });
+        }
+        const user = await User.findById(req.user._id);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        const cartItem = user.cart.find(
+            (item) => item.productId.toString() === productId
+        );
+        if (!cartItem) {
+            return res.status(404).json({ message: "Item not found in cart" });
+        }
+        cartItem.quantity = quantity;
+        await user.save();
+        await user.populate("cart.productId");
+        return res.status(200).json({
+            data: user.cart,
+            message: "Cart item quantity updated successfully",
+        });
+    } catch (error) {
+        console.log(
+            " update cart item quantity me hi error aa rha bhai ",
+            error
+        );
+        res.status(error.status || 500).json({
+            message: error.message || "Internal server error",
+        });
+    }
+});

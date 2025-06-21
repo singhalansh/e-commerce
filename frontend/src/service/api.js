@@ -60,3 +60,60 @@ export const fetchUserProfile = async () => {
         return error.response;
     }
 };
+
+export const getCart = async () => {
+    try {
+        return await axios.get(`/api/cart`);
+    } catch (error) {
+        console.log("Error while fetching cart: ", error.message);
+        return error.response;
+    }
+};
+
+export const addToCart = async (productId, quantity = 1) => {
+    try {
+        return await axios.post(`/api/cart/add`, { productId, quantity });
+    } catch (error) {
+        console.log("Error while adding to cart: ", error.message);
+        return error.response;
+    }
+};
+
+export const removeFromCart = async (productId) => {
+    try {
+        return await axios.post(`/api/cart/remove`, { productId });
+    } catch (error) {
+        console.log("Error while removing from cart: ", error.message);
+        return error.response;
+    }
+};
+
+export const updateCartItemQuantity = async (productId, quantity) => {
+    try {
+        return await axios.post(`/api/cart/update`, { productId, quantity });
+    } catch (error) {
+        console.log("Error while updating cart item quantity: ", error.message);
+        return error.response;
+    }
+};
+
+export const generateRazorpayOrder = async (amount) => {
+    try {
+        return await axios.post(`/api/placeorder`, { amount });
+    } catch (error) {
+        console.log("Error while generating Razorpay order: ", error.message);
+        return error.response;
+    }
+};
+
+export const generateCartRazorpayOrder = async () => {
+    try {
+        return await axios.post(`/api/cart/pay`);
+    } catch (error) {
+        console.log(
+            "Error while generating cart Razorpay order: ",
+            error.message
+        );
+        return error.response;
+    }
+};

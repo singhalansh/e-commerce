@@ -14,9 +14,18 @@ export const getProducts = createAsyncThunk(
 // Fetch product by ID
 export const getProductById = createAsyncThunk(
     "products/getProductById",
-    async (id) => {
-        const response = await axios.get(`/api/product/${id}`);
-        return response.data;
+    async (id, { rejectWithValue }) => {
+        try {
+            const response = await axios.get(`/api/product/${id}`);
+            console.log("Product data from API:", response.data);
+            return response.data;
+        } catch (error) {
+            console.error(
+                "Failed to fetch product by ID:",
+                error.response?.data || error.message
+            );
+            return rejectWithValue(error.response?.data);
+        }
     }
 );
 
@@ -50,8 +59,12 @@ const slice = createSlice({
                 state.product = null;
             })
             .addCase(getProductById.fulfilled, (state, action) => {
+                console.log(
+                    "Reducer getProductById.fulfilled - Payload:",
+                    action.payload
+                );
                 state.loading = false;
-                state.product = action.payload;
+                state.product = action.payload.data;
             })
             .addCase(getProductById.rejected, (state, action) => {
                 state.loading = false;
