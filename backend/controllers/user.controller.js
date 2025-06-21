@@ -94,11 +94,8 @@ export const userlogin = async (req, res) => {
             .cookie("accessToken", accessToken, accessTokenOptions)
             .cookie("refreshToken", refreshToken, refreshTokenOptions)
             .json({
-                data: user,
+                data: loggedInUser,
                 message: "Login successful",
-                user,
-                accessToken,
-                refreshToken,
             });
     } catch (error) {
         console.log(" login me hi error aa rha bhai ", error);
@@ -124,11 +121,13 @@ export const userlogout = async (req, res) => {
 
         const accessTokenOptions = {
             secure: true,
-            httpOnly: false,
+            httpOnly: true,
+            sameSite: "none",
         };
         const refreshTokenOptions = {
             secure: true,
             httpOnly: true,
+            sameSite: "none",
         };
 
         return res

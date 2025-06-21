@@ -1,46 +1,54 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import connectDB from "./db/index.js";
 import DefaultData from "./default.js";
 import routes from "./routes/routes.js";
-import {v4 as uuid} from "uuid";
-import cookieParser from "cookie-parser";
-const app = express();
+import { v4 as uuid } from "uuid";
 
-app.use(express.json());
-app.use(cookieParser());
-app.get("/", (req, res) => {
-    res.send("Hello World!");
+dotenv.config({
+    path: "./.env",
 });
+
+const app = express();
 
 app.use(
     cors({
         origin: [
-            "http://localhost:5173", // local dev
-            "https://your-frontend-domain.com" // <-- replace with your deployed frontend domain if needed
+            "http://localhost:5173",
+            "https://e-commerce-uh9v.onrender.com",
         ],
         credentials: true,
     })
 );
 
-dotenv.config({
-    path: "./.env",
+app.use(express.json());
+app.use(cookieParser());
+
+app.get("/", (req, res) => {
+    res.send("Hello World!");
 });
+
 connectDB();
+
 app.use("/api", routes);
+
 app.listen(3000, () => {
     console.log("Server is running on http://localhost:3000");
 });
 
 DefaultData();
 
-export const paytmMerchantKey = process.env.PAYTM_MERCHANT_KEY || "YOUR_PAYTM_MERCHANT_KEY";
-export const paytmparams= {}
+export const paytmMerchantKey =
+    process.env.PAYTM_MERCHANT_KEY || "YOUR_PAYTM_MERCHANT_KEY";
+export const paytmparams = {};
 paytmparams["MID"] = process.env.PAYTM_MID || "YOUR_PAYTM_MID";
 paytmparams["WEBSITE"] = process.env.PAYTM_WEBSITE || "YOUR_PAYTM_WEBSITE";
-paytmparams["INDUSTRY_TYPE_ID"] = process.env.PAYTM_INDUSTRY_TYPE_ID || "YOUR_PAYTM_INDUSTRY_TYPE_ID";
-paytmparams["CALLBACK_URL"] = process.env.PAYTM_CALLBACK_URL || "YOUR_PAYTM_CALLBACK_URL";
+paytmparams["INDUSTRY_TYPE_ID"] =
+    process.env.PAYTM_INDUSTRY_TYPE_ID || "YOUR_PAYTM_INDUSTRY_TYPE_ID";
+paytmparams["CALLBACK_URL"] =
+    process.env.PAYTM_CALLBACK_URL || "YOUR_PAYTM_CALLBACK_URL";
 paytmparams["ORDER_ID"] = uuid();
 paytmparams["CUST_ID"] = uuid();
 paytmparams["TXN_AMOUNT"] = "1"; // Default amount, can be updated later
