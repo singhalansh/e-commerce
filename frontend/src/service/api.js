@@ -118,3 +118,12 @@ export const generateCartRazorpayOrder = async () => {
         return error.response;
     }
 };
+
+export const verifyPayment = async (paymentDetails) => {
+    try {
+        return await axios.post(`/api/verify-payment`, paymentDetails);
+    } catch (error) {
+        console.log("Error while verifying payment: ", error.message);
+        return error.response;
+    }
+};

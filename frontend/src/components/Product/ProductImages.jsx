@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { DataContext } from "../../context/DataProvider";
 import { addToCart } from "../../service/api";
 import { generateRazorpayOrder } from "../../service/api";
+import { verifyPayment } from "../../service/api";
+
 function ProductImages({
     productImages,
     selectedImage,
@@ -74,26 +76,16 @@ function ProductImages({
                         console.log("Payment successful:", razorpayResponse);
                         // Send payment details to backend for verification
                         try {
-                            const verifyRes = await fetch(
-                                "http://localhost:3000/api/verify-payment",
-                                {
-                                    method: "POST",
-                                    headers: {
-                                        "Content-Type": "application/json",
-                                    },
-                                    credentials: "include",
-                                    body: JSON.stringify({
-                                        razorpay_payment_id:
-                                            razorpayResponse.razorpay_payment_id,
-                                        razorpay_order_id:
-                                            razorpayResponse.razorpay_order_id,
-                                        razorpay_signature:
-                                            razorpayResponse.razorpay_signature,
-                                    }),
-                                }
-                            );
-                            const verifyData = await verifyRes.json();
-                            if (verifyRes.ok && verifyData.success) {
+                            const verifyRes = await verifyPayment({
+                                razorpay_payment_id:
+                                    razorpayResponse.razorpay_payment_id,
+                                razorpay_order_id:
+                                    razorpayResponse.razorpay_order_id,
+                                razorpay_signature:
+                                    razorpayResponse.razorpay_signature,
+                            });
+
+                            if (verifyRes && verifyRes.status === 200) {
                                 alert("Payment verified and successful!");
                                 // Optionally redirect or update UI
                             } else {
