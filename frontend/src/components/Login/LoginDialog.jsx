@@ -1,7 +1,55 @@
 import React from "react";
-import { Button, Dialog, TextField } from "@mui/material";
+import {
+    Button,
+    Dialog,
+    TextField,
+    Box,
+    styled,
+    Typography,
+} from "@mui/material";
 import { authenticateSignup, authenticateLogin } from "../../service/api";
 import { DataContext } from "../../context/DataProvider";
+
+const Component = styled(Box)(({ theme }) => ({
+    display: "flex",
+    height: "60vh",
+    width: "32.9vw",
+    [theme.breakpoints.down("md")]: {
+        flexDirection: "column",
+        width: "90vw",
+        height: "auto",
+    },
+}));
+
+const LeftWrapper = styled(Box)(({ theme }) => ({
+    padding: "45px 25px",
+    height: "100%",
+    width: "40%",
+    backgroundColor: "#2874f0",
+    backgroundImage: `url(${"https://static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/login_img_c4a81e.png"})`,
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center 85%",
+    color: "#fff",
+    "& > h1": {
+        fontWeight: 600,
+        fontSize: "1.5rem",
+    },
+    "& > h3": {
+        marginTop: "1.25rem",
+    },
+    [theme.breakpoints.down("md")]: {
+        display: "none",
+    },
+}));
+
+const RightWrapper = styled(Box)(({ theme }) => ({
+    height: "100%",
+    width: "60%",
+    padding: "2rem",
+    [theme.breakpoints.down("md")]: {
+        width: "100%",
+    },
+}));
 
 function LoginDialog({ open, setOpen }) {
     const [account, toggleAccount] = React.useState("login");
@@ -58,20 +106,20 @@ function LoginDialog({ open, setOpen }) {
                 paper: { sx: { maxWidth: "unset", maxHeight: "unset" } },
             }}
         >
-            <div className="w-[32.9vw] h-[60vh] bg-white flex">
-                <div className="left py-[45px] px-[25px] h-full w-[40%] bg-[#2874f0] bg-[url('https://static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/login_img_c4a81e.png')] bg-no-repeat bg-[center_85%]">
-                    <h1 className="text-white font-semibold text-xl">
+            <Component>
+                <LeftWrapper>
+                    <h1>
                         {account === "login"
                             ? "LOGIN"
                             : "Looks like you're new here"}
                     </h1>
-                    <h3 className="text-white mt-5">
+                    <h3>
                         {account === "login"
                             ? "Get access to your Orders, Wishlist and Recommendations"
                             : "Sign up to get started"}
                     </h3>
-                </div>
-                <div className="right h-full w-[60%] p-8">
+                </LeftWrapper>
+                <RightWrapper>
                     {account === "login" ? (
                         <>
                             <TextField
@@ -91,10 +139,16 @@ function LoginDialog({ open, setOpen }) {
                                 onChange={(e) => onInputChange(e)}
                                 name="password"
                             />
-                            <p className="mt-20 text-blue-500">
+                            <Typography
+                                sx={{
+                                    marginTop: "2.5rem",
+                                    color: "primary.main",
+                                    fontSize: "14px",
+                                }}
+                            >
                                 By continuing, you agree to Flipkart's Terms of
                                 Use and Privacy Policy.
-                            </p>
+                            </Typography>
                             <Button
                                 variant="contained"
                                 color="primary"
@@ -114,7 +168,11 @@ function LoginDialog({ open, setOpen }) {
                             >
                                 Login
                             </Button>
-                            <p className="mt-4 text-center">OR</p>
+                            <Typography
+                                sx={{ marginTop: "1rem", textAlign: "center" }}
+                            >
+                                OR
+                            </Typography>
                             <Button
                                 variant="text"
                                 color="primary"
@@ -135,16 +193,26 @@ function LoginDialog({ open, setOpen }) {
                             >
                                 Request OTP
                             </Button>
-                            <p className="mt-10 flex items-center">
+                            <Typography
+                                sx={{
+                                    marginTop: "2.5rem",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    fontSize: "14px",
+                                }}
+                            >
                                 New to Flipkart?{" "}
                                 <Button
                                     onClick={() => toggleAccount("register")}
                                     variant="text"
-                                    className="text-blue-500 translate-0.5"
+                                    sx={{
+                                        color: "primary.main",
+                                        transform: "translateY(0.125rem)",
+                                    }}
                                 >
                                     Create an account
                                 </Button>
-                            </p>
+                            </Typography>
                         </>
                     ) : (
                         <>
@@ -189,10 +257,16 @@ function LoginDialog({ open, setOpen }) {
                                 onChange={(e) => onInputChange(e)}
                                 name="password"
                             />
-                            <p className="mt-8 text-blue-500">
+                            <Typography
+                                sx={{
+                                    marginTop: "2rem",
+                                    color: "primary.main",
+                                    fontSize: "14px",
+                                }}
+                            >
                                 By continuing, you agree to Flipkart's Terms of
                                 Use and Privacy Policy.
-                            </p>
+                            </Typography>
                             <Button
                                 variant="contained"
                                 color="primary"
@@ -212,20 +286,29 @@ function LoginDialog({ open, setOpen }) {
                             >
                                 Sign Up
                             </Button>
-                            <p className="flex items-center">
+                            <Typography
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    fontSize: "14px",
+                                }}
+                            >
                                 Existing User?{" "}
                                 <Button
                                     onClick={() => toggleAccount("login")}
                                     variant="text"
-                                    className="text-blue-500 translate-0.5"
+                                    sx={{
+                                        color: "primary.main",
+                                        transform: "translateY(0.125rem)",
+                                    }}
                                 >
                                     Login
                                 </Button>
-                            </p>
+                            </Typography>
                         </>
                     )}
-                </div>
-            </div>
+                </RightWrapper>
+            </Component>
         </Dialog>
     );
 }
