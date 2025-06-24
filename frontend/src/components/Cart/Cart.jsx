@@ -30,6 +30,7 @@ import {
     generateCartRazorpayOrder,
     verifyPayment,
 } from "../../service/api";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
     const { cart, setCart } = useContext(DataContext);
@@ -41,6 +42,7 @@ const Cart = () => {
     });
     const [promoCode, setPromoCode] = useState("");
     const [promoDiscount, setPromoDiscount] = useState(0);
+    const navigate = useNavigate();
 
     // Calculate totals
     const totals = useMemo(() => {
@@ -151,7 +153,7 @@ const Cart = () => {
                                     "Cart payment verified and successful!"
                                 );
                                 setCart([]); // Clear the cart after successful payment
-                                // Optionally redirect
+                                setTimeout(() => navigate("/"), 1000); // Redirect to home after short delay
                             } else {
                                 showSnackbar(
                                     "Cart payment verification failed.",
@@ -357,7 +359,11 @@ const Cart = () => {
             <Typography variant="body1" color="text.secondary" mb={3}>
                 Looks like you haven't added anything to your cart yet
             </Typography>
-            <Button variant="contained" size="large">
+            <Button
+                variant="contained"
+                size="large"
+                onClick={() => navigate("/")}
+            >
                 Continue Shopping
             </Button>
         </Paper>
@@ -506,7 +512,12 @@ const Cart = () => {
                             Pay for Cart
                         </Button>
 
-                        <Button variant="outlined" size="large" fullWidth>
+                        <Button
+                            variant="outlined"
+                            size="large"
+                            fullWidth
+                            onClick={() => navigate("/")}
+                        >
                             Continue Shopping
                         </Button>
                     </Paper>
